@@ -25,4 +25,74 @@ A real-time, feature-rich chat application built with **React Native** and **Fir
 - **Firebase Cloud Functions**: Server-side operations for triggers and validations.
    
 ### **Optional Add-ons**  
-- **Agora/Twilio**: For voice and video calling.  
+- **Agora/Twilio**: For voice and video calling.
+
+### ** Folder Organization
+
+/ChatApp
+├── /src
+│   ├── /assets               # Static assets like images, fonts, etc.
+│   │   ├── /images           # Images used in the app
+│   │   ├── /icons            # Icons
+│   │   └── /fonts            # Custom fonts
+│   │
+│   ├── /components           # Reusable UI components
+│   │   ├── Button.js         # Custom button component
+│   │   ├── InputField.js     # Custom input field component
+│   │   ├── MessageBubble.js  # Message UI component
+│   │   └── ...               # Other UI components
+│   │
+│   ├── /features             # Feature-specific modules
+│   │   ├── /auth             # Authentication module
+│   │   │   ├── AuthScreen.js
+│   │   │   ├── authSlice.js  # Redux slice for auth
+│   │   │   ├── authService.js
+│   │   │   └── __tests__     # Test files for authentication feature
+│   │   │       ├── authSlice.test.js
+│   │   │       ├── AuthScreen.test.js
+│   │   │       └── authService.test.js
+│   │   ├── /chat             # Chat module
+│   │   │   ├── ChatScreen.js
+│   │   │   ├── chatSlice.js
+│   │   │   ├── chatService.js
+│   │   │   └── __tests__     # Test files for chat feature
+│   │   │       ├── chatSlice.test.js
+│   │   │       ├── ChatScreen.test.js
+│   │   │       └── chatService.test.js
+│   │   ├── /profile          # Profile management module
+│   │   │   ├── ProfileScreen.js
+│   │   │   ├── profileSlice.js
+│   │   │   ├── profileService.js
+│   │   │   └── __tests__     # Test files for profile feature
+│   │   │       ├── profileSlice.test.js
+│   │   │       ├── ProfileScreen.test.js
+│   │   │       └── profileService.test.js
+│   │   └── ...               # Other features (e.g., group chats, media sharing)
+│   │
+│   ├── /hooks                # Custom React hooks
+│   │   ├── useAuth.js
+│   │   ├── useChat.js
+│   │   └── __tests__         # Test files for hooks
+│   │       ├── useAuth.test.js
+│   │       ├── useChat.test.js
+│   │       └── ...
+│   │
+│   ├── /navigation           # Navigation setup
+│   │   ├── AppNavigator.js   # Main navigation file
+│   │   ├── AuthStack.js      # Auth flow
+│   │   ├── ChatStack.js      # Chat flow
+│   │   └── __tests__         # Test files for navigation
+│   │       ├── AppNavigator.test.js
+│   │       └── ...
+│   │
+│   ├── /services             # Firebase and third-party service integrations
+│   │   ├── firebase.js       # Firebase configuration and initialization
+│   │   ├── notifications.js  # Push notification service
+│   │   └── __tests__         # Test files for services
+│   │       ├── firebase.test.js
+│   │       └── notifications.test.js
+│   │
+│   ├── /state                # Global state management
+│   │   ├── store.js          # Redux store setup
+│   │  
+
