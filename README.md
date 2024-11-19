@@ -29,6 +29,7 @@ A real-time, feature-rich chat application built with **React Native** and **Fir
 
 ### ** Folder Organization
 
+``` bash
 /ChatApp
 ├── /src
 │   ├── /assets               # Static assets like images, fonts, etc.
@@ -94,5 +95,34 @@ A real-time, feature-rich chat application built with **React Native** and **Fir
 │   │
 │   ├── /state                # Global state management
 │   │   ├── store.js          # Redux store setup
-│   │  
+│   │   ├── rootReducer.js    # Combine all slices
+│   │   └── __tests__         # Test files for state management
+│   │       ├── store.test.js
+│   │       └── rootReducer.test.js
+│   │
+│   ├── /styles               # Shared styles
+│   │   ├── colors.js         # Color palette
+│   │   ├── typography.js     # Fonts and text styles
+│   │   └── globalStyles.js   # General reusable styles
+│   │
+│   ├── /utils                # Utility functions
+│   │   ├── dateUtils.js      # Date and time formatting
+│   │   ├── validation.js     # Input validation
+│   │   └── __tests__         # Test files for utilities
+│   │       ├── dateUtils.test.js
+│   │       └── validation.test.js
+│   │
+│   ├── App.js                # Main entry point
+│   └── index.js              # React Native entry file
+│
+├── /ios                      # iOS-specific files
+├── /android                  # Android-specific files
+├── /tests                    # Global or integration tests
+│   ├── App.test.js           # General app tests
+│   ├── navigation.test.js    # Navigation tests
+│   ├── firebase.test.js      # Firebase integration tests
+│   └── ...
+├── package.json              # NPM dependencies and scripts
+└── README.md                 # Documentation
+```
 
