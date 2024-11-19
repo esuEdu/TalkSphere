@@ -115,8 +115,6 @@ A real-time, feature-rich chat application built with **React Native** and **Fir
 │   ├── App.js                # Main entry point
 │   └── index.js              # React Native entry file
 │
-├── /ios                      # iOS-specific files
-├── /android                  # Android-specific files
 ├── /tests                    # Global or integration tests
 │   ├── App.test.js           # General app tests
 │   ├── navigation.test.js    # Navigation tests
