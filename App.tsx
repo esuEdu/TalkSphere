@@ -1,20 +1,34 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import 'react-native-gesture-handler';
+import React, { useContext } from 'react';
+import { NavigationContainer } from '@react-navigation/native';
 
-export default function App() {
+import { AuthProvider, AuthContext } from './src/contexts/AuthContext';
+import { ProfileProvider, ProfileContext } from './src/contexts/ProfileContext';
+
+import AuthStack from './src/navigation/AuthStack';
+import AppStack from './src/navigation/AppStack';
+
+const Routes: React.FC = () => {
+  const { user, loading } = useContext(AuthContext);
+
+  if (loading) {
+    // You can return a loading indicator here
+    return null;
+  }
+
+  return user ? <AppStack /> : <AuthStack />;
+};
+
+const App: React.FC = () => {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <AuthProvider>
+      <ProfileProvider>
+        <NavigationContainer>
+          <Routes />
+        </NavigationContainer>
+      </ProfileProvider>
+    </AuthProvider>
   );
-}
+};
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default App;
