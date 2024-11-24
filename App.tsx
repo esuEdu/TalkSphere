@@ -8,6 +8,8 @@ import { ProfileProvider, ProfileContext } from './src/contexts/ProfileContext';
 import AuthStack from './src/navigation/AuthStack';
 import AppStack from './src/navigation/AppStack';
 
+import Toast from 'react-native-toast-message';
+
 const Routes: React.FC = () => {
   const { user, loading } = useContext(AuthContext);
 
@@ -15,7 +17,7 @@ const Routes: React.FC = () => {
     // You can return a loading indicator here
     return null;
   }
-
+  
   return user ? <AppStack /> : <AuthStack />;
 };
 
@@ -26,6 +28,7 @@ const App: React.FC = () => {
         <NavigationContainer>
           <Routes />
         </NavigationContainer>
+        <Toast />
       </ProfileProvider>
     </AuthProvider>
   );

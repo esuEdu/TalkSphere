@@ -1,7 +1,9 @@
+// src/contexts/AuthContext.tsx
 import React, { createContext, useState, useEffect } from 'react';
-import { firebaseAuth, firestore } from '../services/firebase';
+import { firebaseAuth, firestore, realtimeDB } from '../services/firebase';
 import { onAuthStateChanged, User } from 'firebase/auth';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { ref, onDisconnect, set, serverTimestamp } from 'firebase/database';
 
 type AuthContextType = {
   user: User | null;
@@ -25,24 +27,43 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const unsubscribe = onAuthStateChanged(firebaseAuth, async (authUser) => {
       if (authUser) {
         // Fetch user data from Firestore
-        const userDoc = await getDoc(doc(firestore, 'users', authUser.uid));
+        const userDocRef = doc(firestore, 'users', authUser.uid);
+        const userDoc = await getDoc(userDocRef);
         if (userDoc.exists()) {
           setUser(authUser);
         } else {
           // If user document doesn't exist, create it
-          await setDoc(doc(firestore, 'users', authUser.uid), {
+          await setDoc(userDocRef, {
             uid: authUser.uid,
             email: authUser.email,
+            name: authUser.displayName || 'Unnamed User',
+            photoURL: authUser.photoURL || null,
+            phoneNumber: authUser.phoneNumber || null,
           });
           setUser(authUser);
         }
+
+        // Set user status to online in Realtime Database
+        const userStatusDatabaseRef = ref(realtimeDB, `/status/${authUser.uid}`);
+
+        // Set online status
+        set(userStatusDatabaseRef, {
+          state: 'online',
+          lastChanged: serverTimestamp(),
+        });
+
+        // Ensure status is updated to offline on disconnect
+        onDisconnect(userStatusDatabaseRef).set({
+          state: 'offline',
+          lastChanged: serverTimestamp(),
+        });
       } else {
         setUser(null);
       }
       setLoading(false);
     });
 
-    return unsubscribe;
+    return () => unsubscribe();
   }, []);
 
   return (

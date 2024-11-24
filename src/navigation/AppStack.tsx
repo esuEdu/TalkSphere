@@ -1,29 +1,57 @@
 // src/navigation/AppStack.tsx
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-
-import UsersScreen from '../features/chat/UsersScreen';
+import ChatsScreen from '../features/chat/ChatsScreen';
 import ChatRoomScreen from '../features/chat/ChatRoomScreen';
+import AddFriendModal from '../features/chat/Components/UsersComponents/AddFriendModal';
 import ProfileScreen from '../features/profile/ProfileScreen';
 
 export type AppStackParamList = {
-  Users: undefined;
+  Chats: undefined;
   ChatRoom: { otherUser: any };
+  AddFriend: undefined;
   Profile: undefined;
+  // ... other routes
 };
 
 const Stack = createStackNavigator<AppStackParamList>();
 
-const AppStack: React.FC = () => {
+const AppStack = () => {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="Users" component={UsersScreen} options={{ title: 'Users' }} />
+      <Stack.Screen
+        name="Chats"
+        component={ChatsScreen}
+        options={{
+          headerTitle: 'Chats',
+          // Additional header options if needed
+        }}
+      />
       <Stack.Screen
         name="ChatRoom"
         component={ChatRoomScreen}
-        options={({ route }) => ({ title: route.params.otherUser.email })}
+        options={({ route }) => ({
+          headerTitle: route.params.otherUser.name || 'Chat',
+          // Additional header options if needed
+        })}
       />
-      <Stack.Screen name="Profile" component={ProfileScreen} options={{ title: 'Profile' }} />
+      <Stack.Screen
+        name="AddFriend"
+        component={AddFriendModal}
+        options={{
+          headerShown: false, // Hiding the header as it's a modal
+          presentation: 'modal', // For iOS modal presentation style
+        }}
+      />
+      <Stack.Screen
+        name="Profile"
+        component={ProfileScreen}
+        options={{
+          headerTitle: 'Profile',
+          // Additional header options if needed
+        }}
+      />
+      {/* ... other screens */}
     </Stack.Navigator>
   );
 };
