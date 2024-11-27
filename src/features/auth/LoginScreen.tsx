@@ -14,6 +14,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient'; // Import LinearGradient
 import { firebaseAuth } from '../../services/firebase';
 import {
   sendEmailVerification,
@@ -77,8 +78,10 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
         return;
       }
 
-      // Navigation is handled by AuthContext or your authentication flow
-      Alert.alert('Success', 'Logged in successfully!');
+      // Navigate to the main app screen or dashboard
+      // Example:
+      // navigation.replace('Home');
+
     } catch (error: any) {
       console.error('Login error', error);
       Alert.alert('Login Error', error.message);
@@ -130,14 +133,22 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
           </View>
 
           {loading ? (
-            <ActivityIndicator size="large" color="#007bff" style={styles.loader} />
+            <ActivityIndicator size="large" color="#FFEA00" style={styles.loader} />
           ) : (
             <TouchableOpacity
-              style={styles.button}
               onPress={handleLogin}
               accessibilityLabel="Login Button"
+              disabled={loading} // Disable button while loading
+              style={styles.buttonContainer}
             >
-              <Text style={styles.buttonText}>Login</Text>
+              <LinearGradient
+                colors={['#FFEA00', '#FF6F00']} // Gradient from yellow to orange
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 0 }}
+                style={styles.button}
+              >
+                <Text style={styles.buttonText}>Login</Text>
+              </LinearGradient>
             </TouchableOpacity>
           )}
 
@@ -195,11 +206,10 @@ const styles = StyleSheet.create({
   loader: {
     marginVertical: 10,
   },
-  button: {
-    backgroundColor: '#007bff',
-    paddingVertical: 15,
+  buttonContainer: {
+    width: '100%',
     borderRadius: 30,
-    alignItems: 'center',
+    overflow: 'hidden', // Ensures the gradient respects the border radius
     marginTop: 10,
     elevation: 3, // Shadow for Android
     shadowColor: '#000000', // Shadow for iOS
@@ -207,8 +217,13 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3, // Shadow for iOS
     shadowRadius: 3, // Shadow for iOS
   },
+  button: {
+    paddingVertical: 15,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   buttonText: {
-    color: '#ffffff',
+    color: '#ffffff', // White text for contrast
     fontSize: 18,
     fontWeight: '600',
   },
@@ -221,7 +236,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   switchTextBold: {
-    color: '#007bff',
+    color: '#FF6F00', // Matching the gradient's orange color
     fontWeight: '600',
   },
 });

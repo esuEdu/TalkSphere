@@ -1,77 +1,60 @@
-// src/components/UserAvatar.tsx
+// src/features/chat/UserAvatar.tsx
+
 import React from 'react';
-import { View, Text, Image, StyleSheet } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Image, View, Text, StyleSheet } from 'react-native';
 
-type UserAvatarProps = {
-  name: string;
-  photoURL?: string | null;
-  uid?: string; // Unique identifier for consistent color assignment
-  size?: number;
-};
+interface UserAvatarProps {
+  name?: string;
+  photoURL?: string;
+  size: number;
+}
 
-const COLORS = [
-  '#FFB6C1', '#ADD8E6', '#90EE90', '#FFA07A', '#9370DB',
-  '#FFD700', '#40E0D0', '#FF69B4', '#87CEFA', '#32CD32',
-  '#FF6347', '#1E90FF', '#FF8C00', '#BA55D3', '#00CED1',
-  '#DAA520', '#8A2BE2', '#3CB371', '#DC143C', '#20B2AA',
-];
+const UserAvatar: React.FC<UserAvatarProps> = ({ name, photoURL, size }) => {
 
-const getColorFromUID = (uid: string | undefined): string => {
-  if (!uid) return '#CCCCCC'; // Default color if uid is not provided
-  const charCode = uid.charCodeAt(0);
-  const colorIndex = charCode % COLORS.length;
-  return COLORS[colorIndex];
-};
+  if (photoURL) {
+    return (
+      <Image
+        source={{ uri: photoURL }}
+        style={[styles.avatar, { width: size, height: size, borderRadius: size / 2 }]}
+      />
+    );
+  }
 
-const UserAvatar: React.FC<UserAvatarProps> = ({ name, photoURL, uid, size = 50 }) => {
-
-    console.log('UserAvatar.tsx: UserAvatar: name: ', name);
-
-  const backgroundColor = getColorFromUID(uid);
-  const initial = name ? name.charAt(0).toUpperCase() : '';
+  // Fallback to initials
+  const initials = name
+    ? name
+        .split(' ')
+        .map((n) => n[0])
+        .join('')
+        .toUpperCase()
+    : 'U';
 
   return (
-    <View style={[styles.container, { width: size, height: size, borderRadius: size / 2 }]}>
-      {photoURL ? (
-        <Image
-          source={{ uri: photoURL }}
-          style={[styles.image, { width: size, height: size, borderRadius: size / 2 }]}
-        />
-      ) : name ? (
-        <View style={[styles.initialsContainer, { backgroundColor, width: size, height: size, borderRadius: size / 2 }]}>
-          <Text style={styles.initialsText}>{initial}</Text>
-        </View>
-      ) : (
-        <View style={[styles.iconContainer, { backgroundColor: '#CCCCCC', width: size, height: size, borderRadius: size / 2 }]}>
-          <Ionicons name="person" size={size * 0.6} color="#FFFFFF" />
-        </View>
-      )}
+    <View
+      style={[
+        styles.avatar,
+        {
+          width: size,
+          height: size,
+          borderRadius: size / 2,
+          backgroundColor: '#ccc',
+          justifyContent: 'center',
+          alignItems: 'center',
+        },
+      ]}
+    >
+      <Text style={[styles.initials, { fontSize: size / 2 }]}>{initials}</Text>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    overflow: 'hidden',
-    justifyContent: 'center',
-    alignItems: 'center',
+  avatar: {
+    backgroundColor: '#eee',
   },
-  image: {
-    resizeMode: 'cover',
-  },
-  initialsContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  initialsText: {
-    color: '#FFFFFF',
-    fontSize: 18,
+  initials: {
+    color: '#fff',
     fontWeight: 'bold',
-  },
-  iconContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
   },
 });
 

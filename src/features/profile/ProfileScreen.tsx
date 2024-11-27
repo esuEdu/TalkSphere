@@ -14,6 +14,7 @@ import {
   Keyboard,
   SafeAreaView,
 } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import { ProfileContext } from '../../contexts/ProfileContext';
 import { AuthContext } from '../../contexts/AuthContext';
 import { firestore, storage } from '../../services/firebase';
@@ -153,6 +154,23 @@ const ProfileScreen: React.FC = () => {
                 )}
               </View>
             </TouchableOpacity>
+            
+            {/* Display Email if it exists */}
+            {user?.email && (
+              <View style={styles.infoContainer}>
+                <Text style={styles.label}>Email</Text>
+                <Text style={styles.infoText}>{user.email}</Text>
+              </View>
+            )}
+            
+            {/* Display Phone Number if it exists */}
+            {user?.phoneNumber && (
+              <View style={styles.infoContainer}>
+                <Text style={styles.label}>Phone Number</Text>
+                <Text style={styles.infoText}>{user.phoneNumber}</Text>
+              </View>
+            )}
+
             <TextInput
               placeholder="Name"
               style={styles.input}
@@ -176,16 +194,23 @@ const ProfileScreen: React.FC = () => {
             />
             <TouchableOpacity
               onPress={saveProfile}
-              style={[styles.saveButton, saving && styles.saveButtonDisabled]}
               disabled={saving}
               accessibilityLabel="Save Profile"
               accessibilityHint="Saves your profile information"
+              style={styles.saveButtonContainer}
             >
-              {saving ? (
-                <ActivityIndicator color="#fff" />
-              ) : (
-                <Text style={styles.saveButtonText}>Save</Text>
-              )}
+              <LinearGradient
+                colors={['#FFEA00', '#FF6F00']} // Gradient from yellow to orange
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 0 }}
+                style={[styles.saveButton, saving && styles.saveButtonDisabled]}
+              >
+                {saving ? (
+                  <ActivityIndicator color="#fff" />
+                ) : (
+                  <Text style={styles.saveButtonText}>Save</Text>
+                )}
+              </LinearGradient>
             </TouchableOpacity>
           </View>
         </KeyboardAvoidingView>
@@ -254,27 +279,47 @@ const styles = StyleSheet.create({
     height: 100,
     paddingTop: 15,
   },
+  saveButtonContainer: {
+    width: '100%',
+    borderRadius: 25,
+    overflow: 'hidden', // Ensures the gradient respects the border radius
+    marginTop: 10,
+  },
   saveButton: {
     width: '100%',
     height: 50,
-    backgroundColor: '#007bff',
-    borderRadius: 25,
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 10,
+  },
+  saveButtonDisabled: {
+    opacity: 0.7, // Reduce opacity when disabled
+  },
+  saveButtonText: {
+    color: '#ffffff',
+    fontSize: 18,
+    fontWeight: '600',
+  },
+  infoContainer: {
+    width: '100%',
+    backgroundColor: '#ffffff',
+    borderRadius: 25,
+    paddingHorizontal: 20,
+    paddingVertical: 15,
+    marginBottom: 15,
     elevation: 2, // Shadow for Android
     shadowColor: '#000000', // Shadow for iOS
     shadowOffset: { width: 0, height: 2 }, // Shadow for iOS
     shadowOpacity: 0.1, // Shadow for iOS
     shadowRadius: 2, // Shadow for iOS
   },
-  saveButtonDisabled: {
-    backgroundColor: '#a0cfff',
+  label: {
+    fontSize: 14,
+    color: '#555555',
+    marginBottom: 5,
   },
-  saveButtonText: {
-    color: '#ffffff',
-    fontSize: 18,
-    fontWeight: '600',
+  infoText: {
+    fontSize: 16,
+    color: '#333333',
   },
 });
 

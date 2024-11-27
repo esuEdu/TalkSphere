@@ -3,55 +3,56 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import ChatsScreen from '../features/chat/ChatsScreen';
 import ChatRoomScreen from '../features/chat/ChatRoomScreen';
-import AddFriendModal from '../features/chat/Components/UsersComponents/AddFriendModal';
 import ProfileScreen from '../features/profile/ProfileScreen';
+import AddChatModal from '../features/chat/Components/UsersComponents/AddChatModal';
+import OtherUserProfileScreen from '../features/profile/OtherUserProfileScreen';
+import { StackScreenProps } from '@react-navigation/stack';
+import { User } from '../types/User';
 
 export type AppStackParamList = {
   Chats: undefined;
-  ChatRoom: { otherUser: any };
-  AddFriend: undefined;
+  ChatRoom: { otherUser: User; chatId: string };
   Profile: undefined;
-  // ... other routes
+  StartChat: undefined;
+  AddChat: undefined;
+  OtherUserProfile: { otherUser: User }; // Added OtherUserProfile
 };
 
 const Stack = createStackNavigator<AppStackParamList>();
 
-const AppStack = () => {
+const AppStack: React.FC = () => {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator initialRouteName="Chats">
+      <Stack.Screen 
+        name="Chats" 
+        component={ChatsScreen} 
+        options={{ title: 'Chats' }}
+      />
+      <Stack.Screen 
+        name="ChatRoom" 
+        component={ChatRoomScreen} 
+        options={{ title: 'Chat' }} 
+      />
+      <Stack.Screen 
+        name="Profile" 
+        component={ProfileScreen} 
+        options={{ title: 'Your Profile' }} 
+      />
       <Stack.Screen
-        name="Chats"
-        component={ChatsScreen}
+        name="AddChat"
+        component={AddChatModal}
         options={{
-          headerTitle: 'Chats',
-          // Additional header options if needed
+          presentation: 'modal',
+          headerShown: false,
         }}
       />
       <Stack.Screen
-        name="ChatRoom"
-        component={ChatRoomScreen}
-        options={({ route }) => ({
-          headerTitle: route.params.otherUser.name || 'Chat',
-          // Additional header options if needed
-        })}
-      />
-      <Stack.Screen
-        name="AddFriend"
-        component={AddFriendModal}
+        name="OtherUserProfile"
+        component={OtherUserProfileScreen}
         options={{
-          headerShown: false, // Hiding the header as it's a modal
-          presentation: 'modal', // For iOS modal presentation style
+          title: 'Profile', // Customize the header title as needed
         }}
       />
-      <Stack.Screen
-        name="Profile"
-        component={ProfileScreen}
-        options={{
-          headerTitle: 'Profile',
-          // Additional header options if needed
-        }}
-      />
-      {/* ... other screens */}
     </Stack.Navigator>
   );
 };

@@ -14,6 +14,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient'; // Import LinearGradient
 import { firebaseAuth, firestore } from '../../services/firebase';
 import {
   createUserWithEmailAndPassword,
@@ -110,7 +111,6 @@ const RegisterScreen: React.FC<Props> = ({ navigation }) => {
         'User registered successfully! Please verify your email before logging in.'
       );
 
-      // Optionally, navigate to Login screen after registration
       navigation.navigate('Login');
     } catch (error: any) {
       console.error('Registration error', error);
@@ -191,10 +191,22 @@ const RegisterScreen: React.FC<Props> = ({ navigation }) => {
           </View>
 
           {loading ? (
-            <ActivityIndicator size="large" color="#007bff" style={styles.loader} />
+            <ActivityIndicator size="large" color="#FFEA00" style={styles.loader} />
           ) : (
-            <TouchableOpacity style={styles.button} onPress={handleRegister} accessibilityLabel="Register Button">
-              <Text style={styles.buttonText}>Register</Text>
+            <TouchableOpacity
+              onPress={handleRegister}
+              accessibilityLabel="Register Button"
+              disabled={loading} // Disable button while loading
+              style={styles.buttonContainer}
+            >
+              <LinearGradient
+                colors={['#FFEA00', '#FF6F00']} // Gradient from yellow to orange
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 0 }}
+                style={styles.button}
+              >
+                <Text style={styles.buttonText}>Register</Text>
+              </LinearGradient>
             </TouchableOpacity>
           )}
 
@@ -252,11 +264,10 @@ const styles = StyleSheet.create({
   loader: {
     marginVertical: 10,
   },
-  button: {
-    backgroundColor: '#007bff',
-    paddingVertical: 15,
+  buttonContainer: {
+    width: '100%',
     borderRadius: 30,
-    alignItems: 'center',
+    overflow: 'hidden', // Ensures the gradient respects the border radius
     marginTop: 10,
     elevation: 3, // Shadow for Android
     shadowColor: '#000000', // Shadow for iOS
@@ -264,8 +275,13 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3, // Shadow for iOS
     shadowRadius: 3, // Shadow for iOS
   },
+  button: {
+    paddingVertical: 15,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   buttonText: {
-    color: '#ffffff',
+    color: '#ffffff', // White text for contrast
     fontSize: 18,
     fontWeight: '600',
   },
@@ -278,7 +294,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   switchTextBold: {
-    color: '#007bff',
+    color: '#FF6F00', // Matching the gradient's orange color
     fontWeight: '600',
   },
 });
